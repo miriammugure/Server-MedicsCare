@@ -1,34 +1,10 @@
-import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
+import { Router } from "express";
+import { createUser } from "../controllers/user.contollers.js";
+import { loginUser } from "../controllers/user.contollers.js";
+import { validateInfo } from "../middlewares/user.middleware.js";
 const router = Router();
 
-router.post('/register', async (req, res) => {
-  try {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
-    console.log("Received request to register user:", req.body); 
-    const parsedPhoneNumber = parseInt(phoneNumber, 10);
-    const hashedPassword = bcrypt.hashSync(password, 10);
-   
-
-    const newUser = await prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        phoneNumber:parsedPhoneNumber,
-        password: hashedPassword,
-      },
-    });
-
-   
-    res.status(201).json({ success: true, message: 'User registered successfully' });
-  } catch (error) {
-   
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
+router.post("/register", validateInfo, createUser);
+router.post("/login", loginUser);
 
 export default router;
