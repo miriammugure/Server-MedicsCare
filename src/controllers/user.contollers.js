@@ -38,20 +38,21 @@ export const loginUser = async (req, res) => {
     });
     const passwordMatch = bcrypt.compareSync(password, loginuser.password);
     if (passwordMatch === true) {
+      console.log(loginuser);
       const payload = {
-        firstName: loginUser.firstName,
-        lastName: loginUser.lastName,
-        phoneNumber: loginUser.phoneNumber,
-        email: loginUser.email,
+        id: loginuser.id,
+        firstName: loginuser.firstName,
+        lastName: loginuser.lastName,
+        phoneNumber: loginuser.phoneNumber,
+        email: loginuser.email,
       };
-      res.status(200).json({ message: payload });
+      const token = jwt.sign(payload, process.env.JWT_SECRET);
+      console.log(token);
+      res.cookie("acces_token", token);
+      res.status(200).json({ success: true, data: payload });
     } else {
       res.json("wrong credentials");
     }
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "20m",
-    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
