@@ -28,3 +28,14 @@ model User {
 
 
 }
+
+model medicine{
+  id String @id  @default(uuid()) @map("id")
+  name String @map("name")
+  price Float @map("price")
+  imageUrl String @map("imageUrl")
+
+  @@unique([name])
+
+  @@map("medicine_table")
+}
