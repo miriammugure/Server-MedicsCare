@@ -21,9 +21,9 @@ export const medsController = async (req, res) => {
 
 export const getMedicine = async (req, res) => {
   try {
-    const getMed = await prisma.medicine.findMany();
-    res.status(500).json({ success: true, message: getMed });
+    const medicines = await prisma.medicine.findMany();
+    res.status(200).json({ success: true, data: medicines });
   } catch (error) {
-    res.status(500).json({ success: true, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
