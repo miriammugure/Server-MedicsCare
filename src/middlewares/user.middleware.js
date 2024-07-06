@@ -3,10 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const validateInfo = async (req, res, next) => {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, password, role } = req.body;
   const parsedPhoneNumber = parseInt(phoneNumber, 10);
   try {
-    // Check for required fields
     if (!firstName) {
       return res
         .status(400)
@@ -31,6 +30,11 @@ export const validateInfo = async (req, res, next) => {
       return res
         .status(400)
         .json({ success: false, message: "Password is required" });
+    }
+    if (!role) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please choose who you are" });
     }
 
     const emailTaken = await prisma.user.findFirst({

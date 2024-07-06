@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 
 export const createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
+    const { firstName, lastName, email, phoneNumber, password, role } =
+      req.body;
 
     const parsedPhoneNumber = parseInt(phoneNumber, 10);
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -18,12 +19,11 @@ export const createUser = async (req, res) => {
         email,
         phoneNumber: parsedPhoneNumber,
         password: hashedPassword,
+        role: role,
       },
     });
 
-    res
-      .status(201)
-      .json({ success: true, message: "User registered successfully" });
+    res.status(201).json({ success: true, message: newUser });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -45,6 +45,7 @@ export const loginUser = async (req, res) => {
         lastName: loginuser.lastName,
         phoneNumber: loginuser.phoneNumber,
         email: loginuser.email,
+        role: loginuser.role,
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET);
       console.log(token);

@@ -8,6 +8,7 @@ app.use(
     origin: "http://localhost:5173",
 
     methods: "GET,PUT,PATCH,POST,DELETE",
+    credentials: true,
   }),
 );
 app.use(express.urlencoded({ extended: true }));

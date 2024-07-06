@@ -19,6 +19,7 @@ model User {
   email String @map("email")
   phoneNumber Int @map("phoneNumber")
   password String @map("password")
+  role String @map("role")
 
   @@unique([email,phoneNumber])
 
